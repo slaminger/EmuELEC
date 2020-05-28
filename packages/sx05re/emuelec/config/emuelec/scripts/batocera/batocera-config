@@ -308,17 +308,11 @@ if [[ "$command" == "wifi" ]]; then
 
         if [[ "$mode" == "enable" ]]; then
 	    nmcli radio wifi on
-            exit 0
+	    nmcli dev wifi c "$ssid" password "$psk"
+            exit $?
         fi
   	if [[ "$mode" =~ "start" ]]; then
-            if [[ "$mode" != "forcestart" ]]; then
-                settingsWlan="`$systemsetting -command load -key wifi.enabled`"
-                if [ "$settingsWlan" != "1" ];then
-                    exit 1
-                fi
-            fi
-	    connmanctl enable wifi || exit 1
-	    connmanctl scan   wifi || exit 1
+		# XXX not used?
 	    exit 0
         fi
         if [[ "$mode" == "disable" ]]; then
@@ -326,12 +320,8 @@ if [[ "$command" == "wifi" ]]; then
             exit $?
         fi
 	if [[ "$mode" == "list" ]]; then
-	    WAVAILABLE=$(connmanctl services | cut -b 5- | sed -e s+'^\([^ ]*\).*$'+'\1'+ | grep -vE '^Wired$|^<hidden>$')
-	    if test -n "${ssid}"
-	    then
-		echo "${WAVAILABLE}" | grep -qE '^'"${ssid}"'$' || echo "${ssid}"
-	    fi
-	    echo "${WAVAILABLE}"
+		# XXX not used
+	    nmcli -f SSID dev wifi | tail -n +2 | sed -r 's/\s*$//'
             exit 0
 	fi
 fi
@@ -387,10 +377,11 @@ if [[ "$command" == "storage" ]]; then
 fi
 
 if [[ "$command" == "forgetBT" ]]; then
-   killall -9 hcitool
-   systemctl stop bluetooth
-   rm -rf /storage/.cache/bluetooth/*
-   systemctl start bluetooth
+	# TODO not supported
+#   killall -9 hcitool
+#   systemctl stop bluetooth
+#   rm -rf /storage/.cache/bluetooth/*
+#   systemctl start bluetooth
    exit 0
 fi
 
