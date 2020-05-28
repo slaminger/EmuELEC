@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
 from hashlib import md5
 from os.path import isfile
@@ -254,7 +254,7 @@ def createReadme(systems):
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
-        prefix = "/storage/roms/"
+        prefix = "/home/odroid/.config/retroarch/"
         displayMissingBios(systems, checkBios(systems, prefix))
     elif sys.argv[1] == "--createReadme":
         createReadme(systems)
