@@ -13,16 +13,12 @@ remove_last_word() {
 }
 
 do_list() {
-    connmanctl services | while read; do
-        if [[ $REPLY == *'wifi_'* ]]; then
-          WITHOUT_PREFIX=${REPLY:4}
-          echo $(remove_last_word $WITHOUT_PREFIX)
-        fi
-    done
+    nmcli -f SSID dev wifi | tail -n +2 | sed -r 's/\s*$//'
 }
 
 do_scanlist() {
-    connmanctl scan wifi >/dev/null 2>/dev/null
+#    nmcli -f SSID dev wifi | tail -n +2 | sed -r 's/\s*$//'
+#    connmanctl scan wifi >/dev/null 2>/dev/null
     do_list
 }
 
